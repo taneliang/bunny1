@@ -6,7 +6,7 @@ An example bunny1 server with some common commands that you might want to use.
 """
 __version__ = "1.1"
 
-import urlparse
+from urllib.parse import urlsplit, urlunsplit
 import subprocess
 
 import bunny1
@@ -146,7 +146,7 @@ class ExampleCommands(bunny1.Bunny1Commands):
             return PRE(eval(arg))
         except Content:
             raise
-        except Exception, e:
+        except Exception as e:
             return PRE("<span style='color: red;'>" + escape(str(e)) + "</span>")
 
     def time(self, arg):
@@ -335,7 +335,7 @@ small {
 
 def rewrite_tld(url, new_tld):
     """changes the last thing after the dot in the netloc in a URL"""
-    (scheme, netloc, path, query, fragment) = urlparse.urlsplit(url)
+    (scheme, netloc, path, query, fragment) = urlsplit(url)
     domain = netloc.split(".")
 
     # this is just an example so we naievely assume the TLD doesn't
@@ -343,7 +343,7 @@ def rewrite_tld(url, new_tld):
     # URLs for example)...
     domain[-1] = new_tld
     new_domain = ".".join(domain)
-    return urlparse.urlunsplit((scheme, new_domain, path, query, fragment))
+    return urlunsplit((scheme, new_domain, path, query, fragment))
 
 def tld_rewriter(new_tld):
     """returns a function that rewrites the TLD of a URL to be new_tld"""
